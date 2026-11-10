@@ -1,4 +1,5 @@
 
+import studentController from "../controllers/studentController.js"
 import Student from "../models/student.js"
 
 const createStudent = async (data) => {
@@ -22,7 +23,7 @@ const createStudent = async (data) => {
         nome,
         email,
         matricula,
-        idade
+        idade,
     })
 
     return {
@@ -31,6 +32,7 @@ const createStudent = async (data) => {
         email: student.email,
         matricula: student.matricula,
         idade: student.idade,
+        ativo: student.ativo,
         createdAt: student.createdAt,
         updatedAt: student.updatedAt
     }
@@ -38,6 +40,18 @@ const createStudent = async (data) => {
 
 const getAllStudent = async () => {
     return Student.find()
+}
+
+const getActiveStudent = async () => {
+    const student = await Student.find({ ativo: true })
+
+    if (!student) {
+        const error = new Error("Estudante não encontrado")
+        error.statusCode = 404
+        throw error
+    }
+
+    return student
 }
 
 const getStudentById = async (id) => {
@@ -52,8 +66,42 @@ const getStudentById = async (id) => {
     return student
 }
 
-const getActiveStudent = async () => {
-      const student = await Student.find({ ativo: true })
+const searchStudentsByName = async (nome) => {
+    const student = await Student.find({
+        nome
+    })
+
+    return student
+}
+
+
+const countStudents = async () => {
+    return Student.countDocuments()
+}
+
+
+const updateStudent = async (id, data) => {
+    const student = await Student.findByIdAndUpdate(id, data, {
+        new: true,
+        runValidators: true
+    })
+
+    if (!student) {
+        const error = new Error("Estudante não encontrado")
+        error.statusCode = 404
+        throw error
+
+    }
+    return student
+}
+
+const updateStatus = async (status, data) => {
+    const { nome, email, matricula, idade } = data
+
+    const student = await Student.findOneAndUpdate(status, data, {
+        new: true,
+        runValidators: true
+    })
 
     if (!student) {
         const error = new Error("Estudante não encontrado")
@@ -69,4 +117,8 @@ export default {
     getAllStudent,
     getStudentById,
     getActiveStudent,
+    searchStudentsByName,
+    countStudents,
+    updateStudent,
+    updateStatus
 }

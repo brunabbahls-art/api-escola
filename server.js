@@ -19,7 +19,7 @@ const PORT = 3000
 
 app.use(express.json());
 
-app.use("/students", studentsRoutes)
+app.use("/students", studentRoutes)
 
 // app.use("/teachers", teachersRoutes)
 

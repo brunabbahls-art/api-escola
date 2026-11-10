@@ -13,6 +13,15 @@ router.get(
     "/",
     studentController.getAllStudent
 )
+router.get(
+    "/active",
+    studentController.getActiveStudent
+)
+
+router.get(
+    "/search/:name",
+    studentController.searchStudentsByName
+)
 
 router.get(
     "/:id",
@@ -20,7 +29,18 @@ router.get(
 )
 
 router.get(
-    "/active",
-    studentController.getActiveStudent
+    "/count/students",
+    studentController.countStudents
+);
+
+router.put(
+    "/:id",
+    studentController.updateStudent
 )
+
+router.patch(
+    "/:id/status",
+    studentController.updateStatus
+)
+
 export default router; 
